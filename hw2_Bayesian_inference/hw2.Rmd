@@ -1,0 +1,30 @@
+---
+title: "hw2"
+author: "Vasilisa Dyomina"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+### 2.1
+```{r}
+df <- read_csv('https://raw.githubusercontent.com/agricolamz/2019_data_analysis_for_linguists/master/data/students/VaDyomina/hw2_Bayesian_inference/hw2_phoible.csv')
+df %>% 
+  mutate(proportion = consonants/phonemes) %>% 
+  filter(proportion == max(proportion)) %>% 
+  select(language)
+```
+
+### 2.2
+```{r}
+a=9.300246
+b=4.4545
+df$abs_value = abs((df$consonants/df$phonemes)-((df$consonants+a)/(df$phonemes+a+b)))
+df %>% 
+  arrange(desc(abs_value)) %>% 
+  head() %>% 
+  select(language)
+```
