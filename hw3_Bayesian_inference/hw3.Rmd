@@ -1,0 +1,37 @@
+---
+title: "hw3"
+author: "Vasilisa Dyomina"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+### 3.1
+```{r}
+df1 <- read_csv('https://raw.githubusercontent.com/agricolamz/2019_data_analysis_for_linguists/master/data/students/VaDyomina/hw3_Bayesian_inference/hw3_phoible.csv')
+prod(dnorm(df1$consonants, 22, 6))
+```
+
+### 3.2
+```{r}
+df2 <- read_csv('https://raw.githubusercontent.com/agricolamz/2019_data_analysis_for_linguists/master/data/letter_frequency.csv')%>% 
+  gather(key = language, value = prob, French:Finnish) %>% 
+  spread(key = letter, value = prob) %>% 
+  mutate(likelihood = m*o*s*t)
+
+data_frame(model = df2$language,
+           prior = 1/length(model), 
+           likelihood = df2$likelihood, 
+           product = prior*likelihood, 
+           posterior = product/sum(product)) -> results
+max(results$posterior)
+```
+
+### 3.3
+```{r}
+df3 <- read.csv('https://raw.githubusercontent.com/agricolamz/2019_data_analysis_for_linguists/master/data/students/VaDyomina/hw3_Bayesian_inference/hw3_task_3.csv')
+(df3$a[1]+33)/(df3$a[1]+33+df3$b[1]+77)
+```
