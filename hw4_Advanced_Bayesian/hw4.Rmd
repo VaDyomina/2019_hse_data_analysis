@@ -1,0 +1,37 @@
+---
+title: "hw4"
+author: "Vasilisa Dyomina"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+##4.1
+```{r}
+data <- read_csv ('https://raw.githubusercontent.com/agricolamz/2019_data_analysis_for_linguists/master/data/students/VaDyomina/hw4_Advanced_Bayesian/hw4_caretta.csv')
+
+mean.prior = mean(data$vowel.dur, trim = 0.1)
+sd.prior = sd(data$vowel.dur)
+
+mean.brs02 =  mean(filter(data, speaker == 'brs02')$vowel.dur, trim = 0.1)
+sd.brs02 = sd(filter(data, speaker == 'brs02')$vowel.dur)
+
+mean.post = weighted.mean(c(mean.prior, mean.brs02), c(1/sd.prior, 1/sd.brs02))
+sd.post = (1/sd.prior+1/sd.brs02)^(-1)
+
+data.frame(speaker = 'brs02', mean.post = mean.post, sd.post = sd.post)
+```
+
+##4.2
+```{r}
+mean.tt01 = mean(filter(data, speaker == 'tt01')$vowel.dur, trim = 0.1)
+sd.tt01 = sd(filter(data, speaker == 'tt01')$vowel.dur)
+
+mean.post = weighted.mean(c(mean.prior, mean.tt01), c(1/sd.prior, 1/sd.tt01))
+sd.post = (1/sd.prior+1/sd.tt01)^(-1)
+
+data.frame(speaker = 'tt01', lower = qnorm(.025, mean.post, sd.post), upper = qnorm(.975, mean.post, sd.post)) 
+```
